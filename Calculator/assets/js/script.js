@@ -23,7 +23,7 @@ function formExpression(event){
         }
     }
     else if (source === backspace){
-        expression = expression.slice(0,expression.length-2);
+        expression = expression.slice(0,expression.length-1).trim();
         smallPadExp.innerText = expression;
         smallPadAns.innerText = '';
     }
@@ -66,8 +66,8 @@ function formExpression(event){
             }else{
                 smallPadAns.innerText = per(ans);
             }
-        }else if (sourceText === '^'){
-            expression += ' ^ ';
+        }else if (sourceText === '√'){
+            expression += '√';
             smallPadAns.innerText = '';
         }
         else{
@@ -80,6 +80,19 @@ function formExpression(event){
 
 // functions to Calculate
 function calculate(expression){
+    if (expression.indexOf('√') !== -1){
+        index = expression.indexOf('√')
+        console.log(index)
+        if (index === 0){
+            expression2 = calculate(expression.slice(index+1,expression.length));
+            return Math.sqrt(expression2)
+        }else{
+
+            expression1 = calculate(expression.slice(0,index));
+            expression2 = calculate(expression.slice(index+1,expression.length));
+            return expression1 * Math.sqrt(expression2)
+        }
+    }
     let postfix = infixToPostfix(expression);
     return postfixEvaluator(postfix);
 }
